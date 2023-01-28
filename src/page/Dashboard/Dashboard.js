@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Table from '../../Components/Table/Table';
 import {BsSearch} from 'react-icons/bs';
+import PrimaryButton from '../../Components/Button/PrimaryButton';
+import { DataContext } from '../../Context/DataProv';
 
 const Dashboard = () => {
+
+    const {toggleModal,setToggleModal} = useContext(DataContext);
+
     return (
         <section className={`m-[2%]`}>
             <div>
@@ -22,10 +27,7 @@ const Dashboard = () => {
                             </div>
                             </div>
                     </div>
-
-                    <div>
-                    <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Add New Bill</button>
-                    </div>
+                    <PrimaryButton onClick={()=>setToggleModal({...toggleModal,action:'get',stateBool: true})}>Add New Bill</PrimaryButton>
                 </div>
             </div>
             <Table></Table>
