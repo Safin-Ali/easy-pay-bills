@@ -4,12 +4,17 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import RouteProve from './Routes/RouteProve';
+import DataProv from './Context/DataProv';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <RouteProve>
-      <App></App>
-    </RouteProve>
+
+      <DataProv>
+        <RouteProve>
+          <App></App>
+        </RouteProve>
+      </DataProv>
+
 );
 
 // If you want to start measuring performance in your app, pass a function
