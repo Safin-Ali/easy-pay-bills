@@ -8,7 +8,7 @@ const Appbar = () => {
                 <div className={`flex gap-2 items-center`}>
                     {/* Brand Name */}
                     <div className={`px-[2.5%] md:px-0`}>
-                        <h2 className={`text-lg md:text-3xl dark:text-whitePrimary font-bold font-mincho`}>Logo</h2>
+                        <h2 className={`text-lg md:text-3xl dark:text-whitePrimary font-bold font-mincho`}>OPB</h2>
                     </div>
                 </div>
                 <div>
