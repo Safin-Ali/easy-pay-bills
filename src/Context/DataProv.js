@@ -33,12 +33,14 @@ const DataProv = ({children}) => {
             if(res.data.acknowledge) return setUserLoad(true);
         })
         .catch(e => {
-            setLoaded(undefined);
+            setLoaded(true);
             return console.log(e.message);
         });
 
         return () => source.cancel();
     },[]);
+
+    console.log(userLoad,loaded)
 
     const providingFunc = {
         toggleModal,
@@ -46,7 +48,8 @@ const DataProv = ({children}) => {
         closeToggle,
         loaded,
         userLoad,
-        logout
+        logout,
+        setUserLoad
     };
 
     return(
