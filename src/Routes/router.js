@@ -1,3 +1,5 @@
+import Signup from "../page/Auth/Signup";
+
 const { createBrowserRouter } = require("react-router-dom");
 const { default: App } = require("../App");
 const { default: Login } = require("../page/Auth/Login");
@@ -11,6 +13,9 @@ export const routerPath = createBrowserRouter([
             },
             {
                 path:'/login', element: <Login></Login>
+            },
+            {
+                path:'/signup', element: <Signup></Signup>
             },
         ]
     },
