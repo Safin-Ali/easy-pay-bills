@@ -31,7 +31,7 @@ const DataProv = ({children}) => {
         const userEncodedInfo = localStorage.getItem('authData');
         const source = axios.CancelToken.source();
 
-        userEncodedInfo && axios.get(``,{headers: {secretKey: userEncodedInfo}})
+        userEncodedInfo && axios.get(`https://easy-pay-bills.vercel.app/checkUser`,{headers: {secretKey: userEncodedInfo}})
         .then(res => {
             setLoaded(true);
             if(res.data.acknowledge) return setUserLoad(true);
