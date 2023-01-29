@@ -27,7 +27,7 @@ const Dashboard = () => {
                             </div>
                             </div>
                     </div>
-                    <PrimaryButton onClick={()=>setToggleModal({...toggleModal,action:'get',stateBool: true})}>Add New Bill</PrimaryButton>
+                    <PrimaryButton onClick={()=>setToggleModal({...toggleModal,action:'post',stateBool: true})}>Add New Bill</PrimaryButton>
                 </div>
             </div>
             <Table></Table>
