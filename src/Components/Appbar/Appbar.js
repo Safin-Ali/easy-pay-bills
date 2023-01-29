@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { DataContext } from '../../Context/DataProv';
+import PrimaryButton from '../Button/PrimaryButton';
 
 const Appbar = () => {
+    const {logout,userLoad} = useContext(DataContext);
     return (
         <header>
             <nav className={`flex md:px-[5%] py-[2%] gap-3 lg:py-[1%] shadow justify-between items-center`}>
@@ -11,8 +13,11 @@ const Appbar = () => {
                         <h2 className={`text-lg md:text-3xl dark:text-whitePrimary font-bold font-mincho`}>OPB</h2>
                     </div>
                 </div>
-                <div>
+                <div className={`flex items-center gap-5`}>
                     <h5>Total paid</h5>
+                    {
+                        userLoad && <div><PrimaryButton onClick={logout} clasName={`bg-red-500 hover:bg-red-600`} padding={`px-2 py-1`}>Logout</PrimaryButton></div>
+                    }
                 </div>
             </nav>
         </header>
