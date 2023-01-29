@@ -7,7 +7,7 @@ import { DataContext } from '../../Context/DataProv';
 
 const Login = () => {
 
-    const {userLoad,setUserLoad} = useContext(DataContext)
+    const {userLoad,setUserLoad,setLoaded} = useContext(DataContext);
 
     // togglr pass feild
     const [passToggle,setPassToggle] = useState(false);
@@ -16,10 +16,11 @@ const Login = () => {
 
     // handle form
     const handleLogin = (obj,clearForm) => {
-            axios.post(`https://online-payment-bills-server.vercel.app/login`,obj)
+            axios.post(`https://easy-pay-bills.vercel.app/login`,obj)
             .then(res => {
                 if(res.data.acknowledge) {
                     localStorage.setItem('authData',res.data.encodedUserInfo);
+                    setLoaded(true);
                     setUserLoad(true);
                     alert('login successful');
                     clearForm();

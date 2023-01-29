@@ -16,7 +16,7 @@ const Signup = () => {
 
     // post form value;
     const handleSignup = (obj,clearForm) => {
-        axios.post(`https://online-payment-bills-server.vercel.app/registration`,obj)
+        axios.post(`https://easy-pay-bills.vercel.app/registration`,obj)
         .then(res => {
             if(res.data.acknowledged) {
                 alert('Registration Successful');
