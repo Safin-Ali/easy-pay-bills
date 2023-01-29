@@ -4,13 +4,13 @@ import {IoClose} from 'react-icons/io5';
 import ReactDOM from 'react-dom';
 import { DataContext } from '../../Context/DataProv';
 import handleDynaForm from '../../Hooks/handleDynaForm';
+import fetchPost from '../../Hooks/fetchPost';
+
 const modalId = document.getElementById('form-modal');
 
 const FormModal = () => {
 
     const {toggleModal,setToggleModal,closeToggle} = useContext(DataContext);
-
-
 
     const feildSchema = {
         'Full Name': 'fullName',
@@ -26,14 +26,16 @@ const FormModal = () => {
         })
     };
 
-    const handleForm = (obj) => {
-        
+    const handleForm = async (obj) => {
+        if(toggleModal.action === 'post'){
+            const res = await fetchPost(`https://easy-pay-bills.vercel.app/add-billing`,obj);
+        }
     }
 
     return ReactDOM.createPortal(
         <section className={`absolute ${toggleModal.stateBool ? 'visited:' : 'invisible'} bg-[#000000c2] top-0 overflow-hidden w-full h-screen transition-all duration-[500ms]`}>
 
-                <div className={'w-[90%] sm:w-1/2 lg:w-[30%] mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[2]'}>
+            <div className={'w-[90%] sm:w-1/2 lg:w-[30%] mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[2]'}>
 
                     {/* Add payment */}
                     <form onSubmit={handleDynaForm(handleForm)} className={`bg-gray-300 transition-transform ${toggleModal.stateBool ? 'scale-100' : 'scale-0'} duration-[500ms] pb-5 border-2 rounded-md`}>
@@ -64,9 +66,11 @@ const FormModal = () => {
                             </div>
 
                             {/* submit btn */}
-                            <PrimaryButton center={true}>SUBMIT</PrimaryButton>
+                            <PrimaryButton center={true}>{toggleModal.action?.toUpperCase()}</PrimaryButton>
                     </form>
-                </div>
+
+            </div>
+
         </section>
         ,modalId
     );
