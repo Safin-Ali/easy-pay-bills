@@ -1,4 +1,5 @@
 import Signup from "../page/Auth/Signup";
+import PrivatePage from "../page/Private/PrivatePage";
 
 const { createBrowserRouter } = require("react-router-dom");
 const { default: App } = require("../App");
@@ -9,7 +10,7 @@ export const routerPath = createBrowserRouter([
     {
         path: '/', element: <App></App>, children:[
             {
-                path:'/', element: <Dashboard></Dashboard>
+                path:'/', element: <PrivatePage><Dashboard></Dashboard></PrivatePage>
             },
             {
                 path:'/login', element: <Login></Login>
