@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import {IoMdEye,IoMdEyeOff} from 'react-icons/io';
 import handleDynaForm from '../../Hooks/handleDynaForm';
 import axios from 'axios';
@@ -10,19 +10,23 @@ const Signup = () => {
     const [passToggle,setPassToggle] = useState(false);
 
     // navigator
-
     const navigate = useNavigate();
 
+    if(localStorage.getItem('authData')) return <Navigate to={`/`}></Navigate>;
+
     // post form value;
-
-    const handleSignup = async (obj,clearForm) => {
-        const res = await axios.post(`http://localhost:5000/registration`,obj);
-
-        if(res.data.acknowledged) {
-            window.alert('Registration Successful');
-            clearForm()
-            return navigate('/login');
-        }
+    const handleSignup = (obj,clearForm) => {
+        axios.post(`https://online-payment-bills-server.vercel.app/registration`,obj)
+        .then(res => {
+            if(res.data.acknowledged) {
+                alert('Registration Successful');
+                clearForm()
+                return navigate('/login');
+            };
+        })
+        .catch(e => {
+            alert(e.response.data.message);
+        })
 
     };
 

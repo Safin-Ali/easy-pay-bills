@@ -1,26 +1,33 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import {IoMdEye,IoMdEyeOff} from 'react-icons/io';
 import handleDynaForm from '../../Hooks/handleDynaForm';
 import axios from 'axios';
+import { DataContext } from '../../Context/DataProv';
 
 const Login = () => {
+
+    const {userLoad,setUserLoad} = useContext(DataContext)
 
     // togglr pass feild
     const [passToggle,setPassToggle] = useState(false);
 
-    // navigator
-    const navigate = useNavigate();
+    if(localStorage.getItem('authData')) return <Navigate to={`/`}></Navigate>;
 
-    // post form value;
-    const handleLogin = async (obj,clearForm) => {
-        const res = await axios.post(`http://localhost:5000/login`,obj);
-        if(res.data.acknowledge) {
-            localStorage.setItem('authData',res.data.encodedUserInfo);
-            alert('login successful');
-            clearForm();
-            navigate('/');
-        }
+    // handle form
+    const handleLogin = (obj,clearForm) => {
+            axios.post(`https://online-payment-bills-server.vercel.app/login`,obj)
+            .then(res => {
+                if(res.data.acknowledge) {
+                    localStorage.setItem('authData',res.data.encodedUserInfo);
+                    setUserLoad(true);
+                    alert('login successful');
+                    clearForm();
+                };
+            })
+            .catch(e => {
+                return alert(e.response.data.message)
+            })
     };
 
     return (
