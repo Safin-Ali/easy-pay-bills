@@ -17,17 +17,21 @@ const DataProv = ({children}) => {
     const[userLoad,setUserLoad] = useState(null);
     const[loaded,setLoaded] = useState(false);
 
+    // here store all paid biiling information
+    const [paidBillsData,setPaidBillsData] = useState(null);
+
     // logout function
     const logout = () => {
         setUserLoad(false);
         localStorage.removeItem('authData');
-    }
+    };
 
+    // auto fetch persist user
     useEffect(()=>{
         const userEncodedInfo = localStorage.getItem('authData');
         const source = axios.CancelToken.source();
 
-        userEncodedInfo && axios.get(`https://online-payment-bills-server.vercel.app/checkUser`,{headers: {secretKey: userEncodedInfo}})
+        userEncodedInfo && axios.get(``,{headers: {secretKey: userEncodedInfo}})
         .then(res => {
             setLoaded(true);
             if(res.data.acknowledge) return setUserLoad(true);
@@ -40,7 +44,16 @@ const DataProv = ({children}) => {
         return () => source.cancel();
     },[]);
 
-    console.log(userLoad,loaded)
+    // fetch all paid bills data
+    useEffect(()=>{
+        const source = axios.CancelToken.source();
+        userLoad ?
+            axios.get(`http://localhost:5000/billing-list`)
+            .then(res => setPaidBillsData(res.data))
+            .catch(e => console.log(e.message))
+        : setPaidBillsData(null)
+        return () => source.cancel();
+    },[userLoad]);
 
     const providingFunc = {
         toggleModal,
@@ -49,7 +62,10 @@ const DataProv = ({children}) => {
         loaded,
         userLoad,
         logout,
-        setUserLoad
+        setUserLoad,
+        setLoaded,
+        paidBillsData,
+        setPaidBillsData
     };
 
     return(
