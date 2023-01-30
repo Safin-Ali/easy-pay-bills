@@ -3,7 +3,7 @@ import { DataContext } from '../../Context/DataProv';
 import PrimaryButton from '../Button/PrimaryButton';
 
 const Appbar = () => {
-    const {logout,userLoad} = useContext(DataContext);
+    const {logout,userLoad,paidBillsData} = useContext(DataContext);
     return (
         <header>
             <nav className={`flex md:px-[5%] py-[2%] gap-3 lg:py-[1%] shadow justify-between items-center`}>
@@ -14,7 +14,7 @@ const Appbar = () => {
                     </div>
                 </div>
                 <div className={`flex items-center gap-5`}>
-                    <h5>Total paid</h5>
+                    <h5 className={`text-xl font-medium`}>Total paid {paidBillsData?.totalPay || 0}$</h5>
                     {
                         userLoad && <div><PrimaryButton onClick={logout} clasName={`bg-red-500 hover:bg-red-600`} padding={`px-2 py-1`}>Logout</PrimaryButton></div>
                     }
