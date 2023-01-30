@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { createContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 export const DataContext = createContext();
 
@@ -37,9 +38,26 @@ const DataProv = ({children}) => {
         return setToggleModal({...toggleModal,stateBool: true,action: 'update',payload: data});
     }
 
+    // table skelton visible state
+    const [tableSkl,setTableSkl] = useState(false);
+
     // delete data function
     const handleDeleteData = (data) => {
         return setToggleModal({...toggleModal,stateBool: true,action: 'delete',payload: data});
+    }
+
+    // notify toast
+    const notifyErr = (text) => {
+        return toast.error(text, {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
     }
 
     // auto fetch persist user
@@ -57,6 +75,8 @@ const DataProv = ({children}) => {
 
         return () => source.cancel();
     },[]);
+
+    console.log(paidBillsData)
 
     // fetch all paid bills data
     useEffect(()=>{
@@ -84,7 +104,10 @@ const DataProv = ({children}) => {
         handleUpdateData,
         handleDeleteData,
         dataChanges,
-        setDataChanges
+        setDataChanges,
+        tableSkl,
+        setTableSkl,
+        notifyErr
     };
 
     return(

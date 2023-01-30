@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import {IoMdEye,IoMdEyeOff} from 'react-icons/io';
 import handleDynaForm from '../../Hooks/handleDynaForm';
 import axios from 'axios';
+import { DataContext } from '../../Context/DataProv';
+import { ToastContainer } from 'react-toastify';
 
 const Signup = () => {
+
+    const {notifyErr} = useContext(DataContext);
 
     // togglr pass feild
     const [passToggle,setPassToggle] = useState(false);
@@ -25,7 +29,7 @@ const Signup = () => {
             };
         })
         .catch(e => {
-            alert(e.response.data.message);
+            notifyErr(e.response.data.message);
         })
 
     };
@@ -66,7 +70,7 @@ const Signup = () => {
                     <Link className={'text-blue-600'} to={'/login'}>signin your account</Link>
                 </div>
             </form>
-
+            <ToastContainer />
         </div>
     );
 };

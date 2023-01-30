@@ -4,10 +4,12 @@ import {IoMdEye,IoMdEyeOff} from 'react-icons/io';
 import handleDynaForm from '../../Hooks/handleDynaForm';
 import axios from 'axios';
 import { DataContext } from '../../Context/DataProv';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
 
-    const {userLoad,setUserLoad,setLoaded} = useContext(DataContext);
+    const {userLoad,setUserLoad,setLoaded,notifyErr} = useContext(DataContext);
 
     // togglr pass feild
     const [passToggle,setPassToggle] = useState(false);
@@ -22,12 +24,11 @@ const Login = () => {
                     localStorage.setItem('authData',res.data.encodedUserInfo);
                     setLoaded(true);
                     setUserLoad(true);
-                    alert('login successful');
                     clearForm();
                 };
             })
             .catch(e => {
-                return alert(e.response.data.message)
+                return notifyErr(e.response.data.message);
             })
     };
 
@@ -56,7 +57,7 @@ const Login = () => {
                     <Link className={'text-blue-600'} to={'/signup'}>create account</Link>
                 </div>
             </form>
-
+            <ToastContainer />
         </div>
     );
 };

@@ -1,18 +1,14 @@
 import React, { useContext } from 'react';
 import { DataContext } from '../../Context/DataProv';
 import PrimaryButton from '../Button/PrimaryButton';
+import TableSkelton from './TableSkelton';
 
 const TableRow = ({val}) => {
 
     const {handleUpdateData,handleDeleteData} = useContext(DataContext);
 
     return(
-        // create dynamicly tr element
-        !val?.length ?
-
-        <tr><td>Wait pzzzzzzz</td></tr>
-
-        : val.map((elm) => <tr key={elm._id} className={`even:bg-[#f2f2f2] text-center hover:bg-zinc-200 duration-150`}>
+        val.map((elm) => <tr key={elm._id} className={`even:bg-[#f2f2f2] text-center hover:bg-zinc-200 duration-150`}>
 
             {/* dynamicly created td element by property */}
                 {
