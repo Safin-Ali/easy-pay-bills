@@ -4,14 +4,18 @@ import PrimaryButton from '../../Components/Button/PrimaryButton';
 import { DataContext } from '../../Context/DataProv';
 import TableHead from '../../Components/Table/TableHead';
 import TableRow from '../../Components/Table/TableRow';
+import PaginationWrapper from '../../Components/Pagination/PaginationWrapper';
 
 const Dashboard = () => {
 
-    const {toggleModal,setToggleModal,paidBillsData,setPaidBillsData} = useContext(DataContext);
-
-    console.log(paidBillsData?.data?.slice(0,10))
+    const {toggleModal,setToggleModal,paidBillsData,setDataLeng} = useContext(DataContext);
 
     const tableHead = ["bill id", "full name","email","phone","paid amount"];
+
+    // set pagination length and recall databage
+    const handlePagenation = (num) => {
+        return setDataLeng(num*10)
+    }
 
     return (
         <section className={`m-[2%]`}>
@@ -44,11 +48,14 @@ const Dashboard = () => {
                 <table className={`w-full`}>
                     <tbody>
                         <TableHead val={tableHead}></TableHead>
-                        <TableRow val={paidBillsData?.data?.slice(0,10)}></TableRow>
+                        <TableRow val={paidBillsData?.data}></TableRow>
                     </tbody>
                 </table>
 
             </div>
+
+            <PaginationWrapper dataLeng={paidBillsData?.count || 0} callBackFunc={handlePagenation} perPage={10}>
+            </PaginationWrapper>
 
         </section>
     );
