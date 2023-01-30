@@ -58,7 +58,21 @@ const DataProv = ({children}) => {
             progress: undefined,
             theme: "light",
             });
-    }
+    };
+
+    // notify toast
+    const notifyWar = (text) => {
+        return toast.warn(text, {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+    };
 
     // auto fetch persist user
     useEffect(()=>{
@@ -76,15 +90,16 @@ const DataProv = ({children}) => {
         return () => source.cancel();
     },[]);
 
-    console.log(paidBillsData)
-
     // fetch all paid bills data
     useEffect(()=>{
+        setPaidBillsData(null);
         const source = axios.CancelToken.source();
         userLoad ?
-            axios.get(`https://easy-pay-bills.vercel.app/billing-list?count=${dataLeng}`)
-            .then(res => setPaidBillsData(res.data))
-            .catch(e => console.log(e.message))
+            axios.get(`http://localhost:5000/billing-list?count=${dataLeng}`)
+            .then(res => {
+                return setPaidBillsData(res.data);
+            })
+            .catch(e =>console.log(e.message))
         : setPaidBillsData(null)
         return () => source.cancel();
     },[userLoad,dataLeng,dataChanges]);
@@ -107,7 +122,8 @@ const DataProv = ({children}) => {
         setDataChanges,
         tableSkl,
         setTableSkl,
-        notifyErr
+        notifyErr,
+        notifyWar
     };
 
     return(

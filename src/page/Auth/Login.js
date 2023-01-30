@@ -9,31 +9,32 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
 
-    const {userLoad,setUserLoad,setLoaded,notifyErr} = useContext(DataContext);
+    const {userLoad,setUserLoad,setLoaded,notifyErr,notifyWar} = useContext(DataContext);
 
-    // togglr pass feild
+    // toggle pass feild
     const [passToggle,setPassToggle] = useState(false);
 
     if(localStorage.getItem('authData')) return <Navigate to={`/`}></Navigate>;
 
     // handle form
     const handleLogin = (obj,clearForm) => {
-            axios.post(`https://easy-pay-bills.vercel.app/login`,obj)
-            .then(res => {
+        if(obj.userPass.length < 6) return notifyWar('Please use minimum 6 character for password')
+        axios.post(`https://easy-pay-bills.vercel.app/login`,obj)
+        .then(res => {
                 if(res.data.acknowledge) {
                     localStorage.setItem('authData',res.data.encodedUserInfo);
                     setLoaded(true);
                     setUserLoad(true);
                     clearForm();
                 };
-            })
-            .catch(e => {
-                return notifyErr(e.response.data.message);
-            })
+        })
+        .catch(e => {
+            return notifyErr(e.response.data.message);
+        });
     };
 
     return (
-        <div className={`w-[30%] mx-auto flex items-center justify-center h-[calc(100vh-40px)]`}>
+        <div className={`w-[90%] sm:w-[60%] md:w-[50%] lg:w-[30%] mx-auto flex items-center justify-center h-[calc(100vh-40px)]`}>
             <form onSubmit={handleDynaForm(handleLogin)} className={`shadow border p-5 w-full`}>
                 <h4 className={`text-xl text-center font-bold underline`}>LOGIN</h4>
 
@@ -53,8 +54,8 @@ const Login = () => {
                     </div>
                 </div>
                 <div className={`flex justify-between items-center`}>
-                    <div><button className={`bg-blue-600 py-1 px-2 rounded-md text-white hover:bg-blue-700 duration-200`}>SIGNIN</button></div>
-                    <Link className={'text-blue-600'} to={'/signup'}>create account</Link>
+                    <div><button className={`bg-blue-600 py-1 px-2 rounded-md text-white hover:bg-blue-700 duration-200`}>Login</button></div>
+                    <Link className={'text-blue-600'} to={'/signup'}>Signup Here</Link>
                 </div>
             </form>
             <ToastContainer />

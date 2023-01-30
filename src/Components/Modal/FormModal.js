@@ -12,7 +12,7 @@ const modalId = document.getElementById('form-modal');
 
 const FormModal = () => {
 
-    const {toggleModal,setToggleModal,closeToggle,setDataChanges,dataChanges,setTableSkl,setPaidBillsData,paidBillsData} = useContext(DataContext);
+    const {toggleModal,setToggleModal,closeToggle,notifyWar,setDataChanges,dataChanges,setTableSkl,setPaidBillsData,paidBillsData} = useContext(DataContext);
 
     const feildSchema = {
         'Full Name': 'fullName',
@@ -29,13 +29,16 @@ const FormModal = () => {
     };
 
     const handleForm = async (obj,clearForm) => {
+
+        if(obj.phoneNum.length < 11) return notifyWar('Please provide 11 digit number')
+
         // add new bills
         if(toggleModal.action === 'post'){
             setTableSkl(true);
             if(paidBillsData?.count+1 > paidBillsData?.count){
                 setPaidBillsData({...paidBillsData,count: paidBillsData.count+1})
             }
-            const res = await fetchPost(`http://localhost:5000/add-billing`,obj);
+            const res = await fetchPost(`https://easy-pay-bills.vercel.app/add-billing`,obj);
             if(res.acknowledged) {
                 setToggleModal(closeToggle);
                 clearForm();

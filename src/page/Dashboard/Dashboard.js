@@ -7,10 +7,12 @@ import TableRow from '../../Components/Table/TableRow';
 import PaginationWrapper from '../../Components/Pagination/PaginationWrapper';
 import TableSkeltonRow from '../../Components/Table/TableSkeltonRow';
 import TableSkelton from '../../Components/Table/TableSkelton';
+import { ToastContainer } from 'react-toastify';
+import axios from 'axios';
 
 const Dashboard = () => {
 
-    const {toggleModal,setToggleModal,paidBillsData,setDataLeng,tableSkl} = useContext(DataContext);
+    const {toggleModal,setToggleModal,setDataLeng,tableSkl,paidBillsData,setPaidBillsData} = useContext(DataContext);
 
     const tableHead = ["bill id", "full name","email","phone","paid amount"];
 
@@ -19,14 +21,23 @@ const Dashboard = () => {
         return setDataLeng(num*10)
     };
 
+    // searchBar feild
+    const handleSearch = (e) => {
+        e.preventDefault();
+        const keyword = e.target.value;
+        axios.get(`http://localhost:5000/serachKeyword/?keywords=${keyword}`)
+        .then(res => setPaidBillsData({...paidBillsData,count:res.data.length,data:res.data}))
+        .catch(err => console.log(err.response.data.message))
+    }
+
     return (
-        <section className={`m-[2%]`}>
+        <section className={`m-[2%] overflow-x-hidden md:overflow-auto lg:overflow-auto`}>
 
             {/* top section */}
             <div>
-                <div className={`flex justify-between gap-5 bg-white border rounded-tl-lg rounded-tr-lg p-2 items-center my-4 shadow-md`}>
+                <div className={`flex flex-col md:flex-row justify-between gap-5 bg-white border rounded-tl-lg rounded-tr-lg p-2 items-center my-4 shadow-md`}>
                     <div className={`flex items-center gap-5`}>
-                        <h5>Billings</h5>
+                        <h5 className={`text-2xl font-semibold`}>Bills</h5>
                         {/* Searchbar */}
                         <div className={`border border-[#24252638] rounded-md flex items-center`}>
 
@@ -35,8 +46,8 @@ const Dashboard = () => {
                             </div>
 
                             {/* Search Feild */}
-                            <div className={``}>
-                                <input type="text" className={`w-full p-1 outline-none pl-3`}/>
+                            <div>
+                                <input onChange={handleSearch} type="text" className={`w-full p-1 outline-none pl-3`}/>
                             </div>
                             </div>
                     </div>
@@ -45,14 +56,14 @@ const Dashboard = () => {
             </div>
 
             {/* table section */}
-            <div className={`w-full`}>
+            <div className={`w-full overflow-x-scroll md:overflow-auto`}>
                 <table className={`w-full`}>
                     <tbody>
                         <TableHead val={tableHead}></TableHead>
                         {
                             !paidBillsData ?
                             <TableSkelton trow={10}></TableSkelton> :
-                            !paidBillsData.data.length ? <h4 className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-3xl font-semibold capitalize text-center`}>no record Found</h4> :
+                            !paidBillsData.data.length ? <tr><td><p className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-3xl font-semibold capitalize text-center`}>no record found</p></td></tr> :
                             <TableRow val={paidBillsData?.data}></TableRow>
                         }
 
@@ -65,7 +76,7 @@ const Dashboard = () => {
 
             <PaginationWrapper dataLeng={paidBillsData?.count || 0} callBackFunc={handlePagenation} perPage={10}>
             </PaginationWrapper>
-
+            <ToastContainer />
         </section>
     );
 };
