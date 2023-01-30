@@ -5,10 +5,11 @@ import handleDynaForm from '../../Hooks/handleDynaForm';
 import axios from 'axios';
 import { DataContext } from '../../Context/DataProv';
 import { ToastContainer } from 'react-toastify';
+import LoadingSpinner from '../../Components/Loading-Spinner/LoadingSpinner';
 
 const Signup = () => {
 
-    const {notifyErr,notifyWar,notifySucc} = useContext(DataContext);
+    const {notifyErr,notifyWar,notifySucc,setLoaded,loaded} = useContext(DataContext);
 
     // togglr pass feild
     const [passToggle,setPassToggle] = useState(false);
@@ -18,23 +19,32 @@ const Signup = () => {
 
     if(localStorage.getItem('authData')) return <Navigate to={`/`}></Navigate>;
 
+
     // post form value;
     const handleSignup = (obj,clearForm) => {
+
         if(obj.userPass.length < 6) return notifyWar('Please use minimum 6 characters for password');
         if(obj.userPass !== obj.confirmPass) return notifyWar(`Password not match. Try again`);
+
+        setLoaded(false);
+
         axios.post(`https://easy-pay-bills.vercel.app/registration`,obj)
         .then(res => {
             if(res.data.acknowledged) {
+                setLoaded(true)
                 notifySucc('Registration Successful');
                 clearForm()
                 return navigate('/login');
             };
         })
         .catch(e => {
+            setLoaded(true)
             notifyErr(e.response.data.message);
         })
 
     };
+
+    if(!loaded) return <LoadingSpinner></LoadingSpinner>
 
     return (
         <div className={`w-[90%] sm:w-[60%] md:w-[50%] lg:w-[30%] mx-auto flex items-center justify-center h-[calc(100vh-40px)]`}>

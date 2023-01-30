@@ -23,15 +23,15 @@ const Dashboard = () => {
 
     // searchBar feild
     const handleSearch = (e) => {
-
         e.preventDefault();
 
         const keyword = e.target.value;
+        setPaidBillsData(null);
 
-        axios.get(`https://easy-pay-bills.vercel.app/serachKeyword/?keywords=${keyword}`,{headers:{authorization: `bearer ${localStorage.getItem('encryptJWTToken')}`}})
+        axios.get(`https://easy-pay-bills.vercel.app/serachKeyword/?keywords=${keyword}`)
 
         .then(res => setPaidBillsData({...paidBillsData,count:res.data.length,data:res.data}))
-        .catch(err => console.log(err.response.data.message))
+        .catch(err => console.log(err.response.data.message));
     }
 
     return (

@@ -34,6 +34,9 @@ const DataProv = ({children}) => {
         localStorage.removeItem('encryptJWTToken');
     };
 
+    // store total paidAmount
+    const [totalAmount,setTotalAmount] = useState(0);
+
     // update data function
     const handleUpdateData = (data) => {
         return setToggleModal({...toggleModal,stateBool: true,action: 'update',payload: data});
@@ -112,6 +115,7 @@ const DataProv = ({children}) => {
         userLoad ?
             axios.get(`https://easy-pay-bills.vercel.app/billing-list?count=${dataLeng}`)
             .then(res => {
+                setTotalAmount(res.data.totalPay);
                 return setPaidBillsData(res.data);
             })
             .catch(e =>console.log(e.message))
@@ -130,6 +134,7 @@ const DataProv = ({children}) => {
         setLoaded,
         paidBillsData,
         setPaidBillsData,
+        totalAmount,
         setDataLeng,
         handleUpdateData,
         handleDeleteData,

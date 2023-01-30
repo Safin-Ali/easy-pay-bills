@@ -6,19 +6,25 @@ import axios from 'axios';
 import { DataContext } from '../../Context/DataProv';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LoadingSpinner from '../../Components/Loading-Spinner/LoadingSpinner';
 
 const Login = () => {
 
-    const {setUserLoad,setLoaded,notifyErr,notifyWar} = useContext(DataContext);
+    const {setUserLoad,setLoaded,notifyErr,notifyWar,loaded} = useContext(DataContext);
 
     // toggle pass feild
     const [passToggle,setPassToggle] = useState(false);
 
     if(localStorage.getItem('authData')) return <Navigate to={`/`}></Navigate>;
 
+    if(!loaded) return <LoadingSpinner></LoadingSpinner>
+
     // handle form
     const handleLogin = (obj,clearForm) => {
+
         if(obj.userPass.length < 6) return notifyWar('Please use minimum 6 character for password');
+        setLoaded(false);
+
         axios.post(`https://easy-pay-bills.vercel.app/login`,obj)
         .then(res => {
                 if(res.data.acknowledge) {
@@ -29,6 +35,7 @@ const Login = () => {
                 };
         })
         .catch(e => {
+            setLoaded(true)
             return notifyErr(e.response.data.message);
         });
     };
