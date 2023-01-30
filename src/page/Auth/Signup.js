@@ -8,7 +8,7 @@ import { ToastContainer } from 'react-toastify';
 
 const Signup = () => {
 
-    const {notifyErr,notifyWar} = useContext(DataContext);
+    const {notifyErr,notifyWar,notifySucc} = useContext(DataContext);
 
     // togglr pass feild
     const [passToggle,setPassToggle] = useState(false);
@@ -21,11 +21,11 @@ const Signup = () => {
     // post form value;
     const handleSignup = (obj,clearForm) => {
         if(obj.userPass.length < 6) return notifyWar('Please use minimum 6 characters for password');
-        if(obj.userPass !== obj.confirmPass) return notifyWar(`Password not matche.`);
+        if(obj.userPass !== obj.confirmPass) return notifyWar(`Password not match. Try again`);
         axios.post(`https://easy-pay-bills.vercel.app/registration`,obj)
         .then(res => {
             if(res.data.acknowledged) {
-                alert('Registration Successful');
+                notifySucc('Registration Successful');
                 clearForm()
                 return navigate('/login');
             };
@@ -43,7 +43,7 @@ const Signup = () => {
 
                 <div className={`my-5`}>
                     <p className={`font-medium ml-1 mb-2`}>Full Name</p>
-                    <input type="text" name={'userFullName'} placeholder={"enter email"} className={`border p-2 w-full rounded`} required/>
+                    <input type="text" name={'userFullName'} placeholder={"enter full name"} className={`border p-2 w-full rounded`} required/>
                 </div>
 
                 <div className={`my-5`}>

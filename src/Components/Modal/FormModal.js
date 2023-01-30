@@ -38,7 +38,7 @@ const FormModal = () => {
             if(paidBillsData?.count+1 > paidBillsData?.count){
                 setPaidBillsData({...paidBillsData,count: paidBillsData.count+1})
             }
-            const res = await fetchPost(`https://easy-pay-bills.vercel.app/add-billing`,obj);
+            const res = await fetchPost(`https://easy-pay-bills.vercel.app/add-billing`,obj,{authorization: `bearer ${localStorage.getItem('encryptJWTToken')}`});
             if(res.acknowledged) {
                 setToggleModal(closeToggle);
                 clearForm();
@@ -50,7 +50,7 @@ const FormModal = () => {
         // update bills
         if(toggleModal.action === 'update') {
             setTableSkl(true);
-            const res = await fetchPatch(`https://easy-pay-bills.vercel.app/update-billing/${toggleModal.payload._id}`,obj);
+            const res = await fetchPatch(`https://easy-pay-bills.vercel.app/update-billing/${toggleModal.payload._id}`,obj,{authorization: `bearer ${localStorage.getItem('encryptJWTToken')}`});
             if(res.modifiedCount > 0) {
                 setToggleModal(closeToggle);
                 clearForm();
@@ -62,7 +62,7 @@ const FormModal = () => {
 
     // handle deleteData
     const handleDeleteData = async () => {
-        const res = await fetchDelete(`https://easy-pay-bills.vercel.app/delete-billing/${toggleModal.payload?._id}`)
+        const res = await fetchDelete(`https://easy-pay-bills.vercel.app/delete-billing/${toggleModal.payload?._id}`,'',{authorization: `bearer ${localStorage.getItem('encryptJWTToken')}`})
             if(res.deletedCount > 0) {
                 setToggleModal(closeToggle);
                 return setDataChanges(!dataChanges);

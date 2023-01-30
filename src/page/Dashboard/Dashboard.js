@@ -23,9 +23,13 @@ const Dashboard = () => {
 
     // searchBar feild
     const handleSearch = (e) => {
+
         e.preventDefault();
+
         const keyword = e.target.value;
-        axios.get(`http://localhost:5000/serachKeyword/?keywords=${keyword}`)
+
+        axios.get(`https://easy-pay-bills.vercel.app/serachKeyword/?keywords=${keyword}`,{headers:{authorization: `bearer ${localStorage.getItem('encryptJWTToken')}`}})
+
         .then(res => setPaidBillsData({...paidBillsData,count:res.data.length,data:res.data}))
         .catch(err => console.log(err.response.data.message))
     }

@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { DataContext } from '../../Context/DataProv';
 import PrimaryButton from '../Button/PrimaryButton';
-import TableSkelton from './TableSkelton';
 
 const TableRow = ({val}) => {
 

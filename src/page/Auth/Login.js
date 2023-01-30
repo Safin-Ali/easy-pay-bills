@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
 
-    const {userLoad,setUserLoad,setLoaded,notifyErr,notifyWar} = useContext(DataContext);
+    const {setUserLoad,setLoaded,notifyErr,notifyWar} = useContext(DataContext);
 
     // toggle pass feild
     const [passToggle,setPassToggle] = useState(false);
@@ -18,7 +18,7 @@ const Login = () => {
 
     // handle form
     const handleLogin = (obj,clearForm) => {
-        if(obj.userPass.length < 6) return notifyWar('Please use minimum 6 character for password')
+        if(obj.userPass.length < 6) return notifyWar('Please use minimum 6 character for password');
         axios.post(`https://easy-pay-bills.vercel.app/login`,obj)
         .then(res => {
                 if(res.data.acknowledge) {

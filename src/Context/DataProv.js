@@ -31,6 +31,7 @@ const DataProv = ({children}) => {
     const logout = () => {
         setUserLoad(false);
         localStorage.removeItem('authData');
+        localStorage.removeItem('encryptJWTToken');
     };
 
     // update data function
@@ -74,17 +75,31 @@ const DataProv = ({children}) => {
             });
     };
 
+    // notify toast
+    const notifySucc = (text) => {
+        return toast.success(text, {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+    };
+
     // auto fetch persist user
     useEffect(()=>{
         const userEncodedInfo = localStorage.getItem('authData');
         const source = axios.CancelToken.source();
 
-        userEncodedInfo ? axios.get(`https://easy-pay-bills.vercel.app/checkUser`,{headers: {secretKey: userEncodedInfo}}).then(res => {
+        userEncodedInfo ? axios.get(`https://easy-pay-bills.vercel.app/checkUser`,{headers:{secretKey: userEncodedInfo}}).then(res => {
             setLoaded(true);
             if(res.data.acknowledge) return setUserLoad(true);
         }).catch(e => {
             setLoaded(undefined);
-            return console.log(e.message);
+            if(e.response.status === 401) return logout();
         }) : setLoaded(true)
 
         return () => source.cancel();
@@ -95,7 +110,7 @@ const DataProv = ({children}) => {
         setPaidBillsData(null);
         const source = axios.CancelToken.source();
         userLoad ?
-            axios.get(`http://localhost:5000/billing-list?count=${dataLeng}`)
+            axios.get(`https://easy-pay-bills.vercel.app/billing-list?count=${dataLeng}`)
             .then(res => {
                 return setPaidBillsData(res.data);
             })
@@ -123,7 +138,8 @@ const DataProv = ({children}) => {
         tableSkl,
         setTableSkl,
         notifyErr,
-        notifyWar
+        notifyWar,
+        notifySucc
     };
 
     return(
