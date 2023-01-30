@@ -12,7 +12,7 @@ const modalId = document.getElementById('form-modal');
 
 const FormModal = () => {
 
-    const {toggleModal,setToggleModal,closeToggle,setDataChanges,dataChanges,setPaidBillsData,paidBillsData} = useContext(DataContext);
+    const {toggleModal,setToggleModal,closeToggle,setDataChanges,dataChanges,setTableSkl,setPaidBillsData,paidBillsData} = useContext(DataContext);
 
     const feildSchema = {
         'Full Name': 'fullName',
@@ -20,8 +20,6 @@ const FormModal = () => {
         Phone: 'phoneNum',
         Payment: 'amount'
     };
-
-    console.log(toggleModal.action)
 
     // hide modal when clicked ESC button
     if(toggleModal.stateBool) {
@@ -33,23 +31,27 @@ const FormModal = () => {
     const handleForm = async (obj,clearForm) => {
         // add new bills
         if(toggleModal.action === 'post'){
+            setTableSkl(true);
             if(paidBillsData?.count+1 > paidBillsData?.count){
                 setPaidBillsData({...paidBillsData,count: paidBillsData.count+1})
             }
-            const res = await fetchPost(`https://easy-pay-bills.vercel.app/add-billing`,obj);
+            const res = await fetchPost(`http://localhost:5000/add-billing`,obj);
             if(res.acknowledged) {
-                clearForm();
                 setToggleModal(closeToggle);
+                clearForm();
+                setTableSkl(false);
                 return setDataChanges(!dataChanges);
             };
         };
 
         // update bills
         if(toggleModal.action === 'update') {
+            setTableSkl(true);
             const res = await fetchPatch(`https://easy-pay-bills.vercel.app/update-billing/${toggleModal.payload._id}`,obj);
             if(res.modifiedCount > 0) {
-                clearForm();
                 setToggleModal(closeToggle);
+                clearForm();
+                setTableSkl(false);
                 return setDataChanges(!dataChanges);
             };
         };
